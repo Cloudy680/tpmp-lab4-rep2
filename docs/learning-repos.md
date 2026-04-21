@@ -6,9 +6,9 @@
 
 | Участник | Ссылка на учебный репозиторий |
 | :--- | :--- |
-| Янушкевич Максим | (https://github.com/Cloudy680/skills-github-pages.git) |
-| Вороненко Константин | (https://github.com/вороненко/название-репо) |
-| Макоско Алексей | (https://github.com/AlexeeyM/skills-github-pages) |
+| Янушкевич Максим | [Учебный репозиторий](https://github.com/Cloudy680/skills-github-pages.git) |
+| Вороненко Константин | [Учебный репозиторий](https://github.com/вороненко/название-репо) |
+| Макоско Алексей | [Учебный репозиторий](https://github.com/AlexeeyM/skills-github-pages) |
 
 ## Что было изучено
 
