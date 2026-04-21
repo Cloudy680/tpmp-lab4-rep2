@@ -14,12 +14,17 @@
 
 using namespace std;
 
-// Прототипы меню
-void adminMenu();
-void farmUserMenu(int farmId);
+// Кроссплатформенная очистка экрана
+#ifdef _WIN32
+#define CLEAR_SCREEN "cls"
+#else
+#define CLEAR_SCREEN "clear"
+#endif
+
 void clearScreen() {
-    system("clear");  // для Linux/Mac; для Windows замените на "cls"
+    system(CLEAR_SCREEN);
 }
+
 void printHeader(const string& title) {
     cout << "\n========== " << title << " ==========\n";
 }
@@ -43,14 +48,22 @@ int main() {
     Database& db = Database::getInstance();
     // Поддержка запуска как из корня проекта, так и из build/
     const string dbPath = pickExistingPath({"data/auction.db", "../data/auction.db"});
-    if (dbPath.empty() || !db.open(dbPath)) {
+    if (dbPath.empty()) {
+        cerr << "Не удалось найти файл базы данных. Проверьте путь." << endl;
+        return 1;
+    }
+    if (!db.open(dbPath)) {
         cerr << "Не удалось открыть БД" << endl;
         return 1;
     }
 
     // 2. Создание таблиц и заполнение данными из SQL-скрипта (если таблиц нет)
     const string scriptPath = pickExistingPath({"data/FurAuction_create.sql", "../data/FurAuction_create.sql"});
-    if (scriptPath.empty() || !db.initFromScript(scriptPath)) {
+    if (scriptPath.empty()) {
+        cerr << "Не удалось найти SQL-скрипт инициализации." << endl;
+        return 1;
+    }
+    if (!db.initFromScript(scriptPath)) {
         cerr << "Ошибка инициализации БД из скрипта" << endl;
         return 1;
     }

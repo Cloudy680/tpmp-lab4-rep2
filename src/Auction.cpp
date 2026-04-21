@@ -30,13 +30,17 @@ bool AuctionManager::validateAuctionResult(const AuctionResult& result) {
         << " AND fur_name = '" << result.furName << "' AND fur_type = '" << result.furType << "';";
     
     int available = 0;
-    auto callback = [&available](int argc, char** argv, char** colName) -> int {
-        if (argc >= 1) available = std::stoi(argv[0]);
+    bool found = false;
+    auto callback = [&available, &found](int argc, char** argv, char** colName) -> int {
+        if (argc >= 1 && argv[0]) {
+            available = std::stoi(argv[0]);
+            found = true;
+        }
         return 0;
     };
     if (!db.query(sql.str(), callback)) return false;
     
-    if (available == 0) {
+    if (!found) {
         std::cerr << "Ошибка: такой лот не найден!" << std::endl;
         return false;
     }
@@ -177,7 +181,7 @@ void AuctionManager::reportFarmMaxProfit() {
     db.query(sql, callback);
 }
 
-// Функция для пункта 5: список ферм с прибылью меньше планового процента (прибыль в процентах от выручки? Уточнение: плановый процент прибыли – например, 20% от выручки)
+// Функция для пункта 5: список ферм с прибылью меньше планового процента
 void AuctionManager::listFarmsLowProfit(double plannedPercent) {
     Database& db = Database::getInstance();
     // Вычисляем для каждой фермы выручку и прибыль, затем прибыль в процентах = (прибыль / выручка)*100
@@ -201,6 +205,11 @@ void AuctionManager::listFarmsLowProfit(double plannedPercent) {
                 if (profitPercent < plannedPercent) {
                     std::cout << "Ферма ID " << argv[0] << " (" << argv[1] << "): прибыль = " << profit
                               << " (" << profitPercent << "%) < " << plannedPercent << "%" << std::endl;
+                }
+            } else {
+                // Если выручка нулевая, прибыль тоже нулевая — считаем, что план не выполнен (если plannedPercent > 0)
+                if (plannedPercent > 0 && profit == 0) {
+                    std::cout << "Ферма ID " << argv[0] << " (" << argv[1] << "): прибыль = 0 (0%) < " << plannedPercent << "%" << std::endl;
                 }
             }
         }

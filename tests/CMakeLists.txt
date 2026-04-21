@@ -7,9 +7,7 @@ FetchContent_Declare(
   URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz
 )
 
-# For macOS: avoid overriding parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
 FetchContent_MakeAvailable(googletest)
 
 add_executable(auction_app_tests
@@ -37,4 +35,3 @@ endif()
 
 include(GoogleTest)
 gtest_discover_tests(auction_app_tests)
-
