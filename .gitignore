@@ -1,0 +1,13 @@
+# Build artifacts
+build/
+cmake-build-*/
+
+# Output binaries
+bin/
+
+# Local database file (generated at runtime)
+data/auction.db
+
+# macOS
+.DS_Store
+
