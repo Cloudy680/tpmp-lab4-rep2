@@ -1,7 +1,3 @@
----
-title: Учебные репозитории GitHub Pages
----
-
 # Итоги изучения курса GitHub Pages
 
 В рамках лабораторной работы №4 каждый участник команды изучил курс **[GitHub Pages](https://github.com/skills/github-pages)** на платформе GitHub Skills.
