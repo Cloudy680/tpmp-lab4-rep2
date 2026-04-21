@@ -31,3 +31,50 @@ jobs:
       - name: Test
         run: ctest --test-dir build --output-on-failure
 
+  coverage-ubuntu:
+    name: Coverage (Ubuntu, gcc+lcov)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ sqlite3 libsqlite3-dev lcov
+
+      - name: Configure (coverage)
+        env:
+          CC: gcc
+          CXX: g++
+        run: |
+          cmake -S . -B build-coverage \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_C_FLAGS="--coverage" \
+            -DCMAKE_CXX_FLAGS="--coverage"
+
+      - name: Build
+        run: cmake --build build-coverage -j
+
+      - name: Test
+        run: ctest --test-dir build-coverage --output-on-failure
+
+      - name: Capture coverage (lcov)
+        run: |
+          lcov --directory build-coverage --capture --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' '*/build-coverage/*' '*/_deps/*' --output-file coverage.info
+          lcov --list coverage.info
+          genhtml coverage.info --output-directory coverage-html
+
+      - name: Upload HTML report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: coverage-html
+
+      - name: Upload to Codecov (optional)
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.info
+          fail_ci_if_error: false
+
