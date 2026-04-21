@@ -14,6 +14,13 @@
 
 using namespace std;
 
+// ========== ПРОТОТИПЫ ФУНКЦИЙ (forward declarations) ==========
+void clearScreen();
+void printHeader(const string& title);
+void adminMenu();
+void farmUserMenu(int farmId);
+// ==============================================================
+
 // Кроссплатформенная очистка экрана
 #ifdef _WIN32
 #define CLEAR_SCREEN "cls"
@@ -22,7 +29,8 @@ using namespace std;
 #endif
 
 void clearScreen() {
-    system(CLEAR_SCREEN);
+    // Подавляем предупреждение о неиспользуемом возвращаемом значении
+    (void)system(CLEAR_SCREEN);
 }
 
 void printHeader(const string& title) {
@@ -46,7 +54,6 @@ static string pickExistingPath(std::initializer_list<string> candidates) {
 int main() {
     // 1. Инициализация БД
     Database& db = Database::getInstance();
-    // Поддержка запуска как из корня проекта, так и из build/
     const string dbPath = pickExistingPath({"data/auction.db", "../data/auction.db"});
     if (dbPath.empty()) {
         cerr << "Не удалось найти файл базы данных. Проверьте путь." << endl;
