@@ -16,7 +16,6 @@
 - [Спецификация проекта (UML)](project-spec)
 - [Дополнительная спецификация](supplementary-spec)
 - [Схема базы данных](database-schema)
-- [Презентация проекта](presentation)
 - [Репозиторий с кодом](code-repo)
 - [Учебные репозитории GitHub Pages](learning-repos)
 
